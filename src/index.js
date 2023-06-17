@@ -3,15 +3,15 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { TransactionsProvider } from "./context/TransactionContext";
+import { SmartContractProvider } from "./context/SmartContractContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <TransactionsProvider>
+  <SmartContractProvider>
     <React.StrictMode>
       <App />
     </React.StrictMode>
-  </TransactionsProvider>
+  </SmartContractProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function

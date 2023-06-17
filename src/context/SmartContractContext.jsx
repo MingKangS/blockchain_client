@@ -1,15 +1,14 @@
-import React, { useState } from "react";
-import { ethers } from "ethers";
-
+import React, { useState, useEffect } from "react";
 import { contractABI, contractAddress } from "../utils/constants";
+const { ethers } = require("ethers");
 
 export const SmartContractContext = React.createContext();
 
 const { ethereum } = window;
 
-const createEthereumContract = () => {
-  const provider = new ethers.providers.Web3Provider(ethereum);
-  const signer = provider.getSigner();
+const createEthereumContract = async () => {
+  const provider = new ethers.BrowserProvider(ethereum);
+  const signer = await provider.getSigner();
   const postsContract = new ethers.Contract(
     contractAddress,
     contractABI,
@@ -19,33 +18,14 @@ const createEthereumContract = () => {
   return postsContract;
 };
 
-export const TransactionsProvider = ({ children }) => {
+export const SmartContractProvider = ({ children }) => {
   const [currentAccount, setCurrentAccount] = useState("");
-  const getAllPosts = async () => {
-    try {
-      if (ethereum) {
-        const postsContract = createEthereumContract();
 
-        const allPosts = await postsContract.getAllPosts();
+  useEffect(() => {
+    checkIfWalletIsConnected();
+  }, []);
 
-        const structuredPosts = allPosts.map((post) => ({
-          author: post.author,
-          postContent: post.postContent,
-          timestamp: post.timestamp.toNumber() * 1000,
-        }));
-
-        console.log(structuredPosts);
-
-        return structuredPosts;
-      } else {
-        console.log("Ethereum is not present");
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const checkIfWalletIsConnect = async () => {
+  const checkIfWalletIsConnected = async () => {
     try {
       if (!ethereum) return alert("Please install MetaMask.");
 
@@ -54,7 +34,7 @@ export const TransactionsProvider = ({ children }) => {
       if (accounts.length) {
         setCurrentAccount(accounts[0]);
       } else {
-        console.log("No accounts found");
+        connectWallet();
       }
     } catch (error) {
       console.log(error);
@@ -78,16 +58,37 @@ export const TransactionsProvider = ({ children }) => {
     }
   };
 
-  const addNewPost = async (postContent, timestamp) => {
+  const getAllPosts = async () => {
     try {
       if (ethereum) {
-        const postsContract = createEthereumContract();
+        const postsContract = await createEthereumContract();
 
-        const transactionHash = await postsContract.addToBlockchain(
-          currentAccount,
-          postContent,
-          timestamp
-        );
+        const allPosts = await postsContract.getAllPosts();
+
+        const structuredPosts = allPosts.map((post) => ({
+          author: post.author,
+          postContent: post.postContent,
+          timestamp: post.timestamp,
+        }));
+
+        console.log(structuredPosts, allPosts);
+
+        return structuredPosts;
+      } else {
+        console.log("Ethereum is not present");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const addNewPost = async (postContent, timestamp) => {
+    console.log(currentAccount, postContent, timestamp, ethereum);
+    try {
+      if (ethereum) {
+        const postsContract = await createEthereumContract();
+
+        const transactionHash = await postsContract.addPost(postContent);
 
         await transactionHash.wait();
 
@@ -97,8 +98,6 @@ export const TransactionsProvider = ({ children }) => {
       }
     } catch (error) {
       console.log(error);
-
-      throw new Error("No ethereum object");
     }
   };
 
@@ -109,7 +108,7 @@ export const TransactionsProvider = ({ children }) => {
         currentAccount,
         getAllPosts,
         addNewPost,
-        checkIfWalletIsConnect,
+        checkIfWalletIsConnected,
       }}>
       {children}
     </SmartContractContext.Provider>

@@ -68,7 +68,7 @@ export const SmartContractProvider = ({ children }) => {
         const structuredPosts = allPosts.map((post) => ({
           author: post.author,
           postContent: post.postContent,
-          timestamp: post.timestamp,
+          timestamp: Number(post.timestamp),
         }));
 
         console.log(structuredPosts, allPosts);

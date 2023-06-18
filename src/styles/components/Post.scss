@@ -1,0 +1,27 @@
+@import "../globals";
+
+.post-container {
+  margin-top: 30px;
+  padding: 8px 12px;
+  background-color: white;
+}
+
+.post-header {
+  width: 100%;
+  height: 40px;
+  display: flex;
+  flex-direction: row;
+}
+
+.author {
+  font-family: "Nunito";
+  font-weight: 600;
+  color: $theme-gray-3;
+}
+
+.timestamp {
+  margin-left: 16px;
+  font-family: "Nunito";
+  font-weight: 400;
+  color: $theme-gray-3;
+}

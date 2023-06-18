@@ -1,5 +1,6 @@
 import React, { useState, useContext } from "react";
 import { SmartContractContext } from "../context/SmartContractContext";
+import "../styles/NewPost.scss";
 
 const NewPost = () => {
   const [postContent, setPostContent] = useState("");
@@ -8,10 +9,17 @@ const NewPost = () => {
     addNewPost(postContent, Date.now());
   };
   return (
-    <div>
-      <div>
-        <input onChange={(e) => setPostContent(e.target.value)} />
-        <button onClick={postButtonClicked}>Post</button>
+    <div className="container">
+      <div className="form">
+        <textarea
+          rows={16}
+          placeholder="Write a post ..."
+          className="post-content-input"
+          onChange={(e) => setPostContent(e.target.value)}
+        />
+        <button className="post-button" onClick={postButtonClicked}>
+          Post
+        </button>
       </div>
     </div>
   );

@@ -54,7 +54,7 @@ export const SmartContractProvider = ({ children }) => {
     } catch (error) {
       console.log(error);
 
-      throw new Error("No ethereum object");
+      alert("Please connect your MetaMask account and refresh the page.");
     }
   };
 

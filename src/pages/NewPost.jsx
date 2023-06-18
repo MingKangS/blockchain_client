@@ -1,6 +1,8 @@
 import React, { useState, useContext } from "react";
 import { SmartContractContext } from "../context/SmartContractContext";
 import "../styles/NewPost.scss";
+import { Editor } from "react-draft-wysiwyg";
+import "../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
 const NewPost = () => {
   const [postContent, setPostContent] = useState("");
@@ -11,12 +13,16 @@ const NewPost = () => {
   return (
     <div className="container">
       <div className="form">
-        <textarea
+        <Editor
+          onChange={(draft) => setPostContent(JSON.stringify(draft))}
+          editorClassName="post-content-input"
+        />
+        {/* <textarea
           rows={16}
           placeholder="Write a post ..."
           className="post-content-input"
           onChange={(e) => setPostContent(e.target.value)}
-        />
+        /> */}
         <button className="post-button" onClick={postButtonClicked}>
           Post
         </button>

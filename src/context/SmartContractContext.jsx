@@ -75,11 +75,12 @@ export const SmartContractProvider = ({ children }) => {
 
         return structuredPosts;
       } else {
-        console.log("Ethereum is not present");
+        console.log("Ethereum is not present. Your browser does not have support for the ethereum blockchain network.");
       }
     } catch (error) {
       console.log(error);
     }
+    return []
   };
 
   const addNewPost = async (postContent, timestamp) => {

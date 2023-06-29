@@ -14,7 +14,8 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="new-post" element={<NewPost />} />
-          <Route path=":postId" element={<PostView />} />
+          <Route path=":username" element={<PostView />} />
+          <Route path="post/:postId" element={<PostView />} />
         </Route>
       </Routes>
     </BrowserRouter>

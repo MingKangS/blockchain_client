@@ -57,6 +57,31 @@ export const SmartContractProvider = ({ children }) => {
       alert("Please connect your MetaMask account and refresh the page.");
     }
   };
+  
+  const getProfile = async () => {
+    try {
+      if (ethereum) {
+        const postsContract = await createEthereumContract();
+
+        const allPosts = await postsContract.getAllPosts();
+
+        const structuredPosts = allPosts.map((post) => ({
+          author: post.author,
+          postContent: post.postContent,
+          timestamp: Number(post.timestamp),
+        }));
+
+        console.log(structuredPosts, allPosts);
+
+        return structuredPosts;
+      } else {
+        console.log("Ethereum is not present. Your browser does not have support for the ethereum blockchain network.");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    return []
+  };
 
   const getAllPosts = async () => {
     try {

@@ -4,7 +4,7 @@ import { SmartContractContext } from "../context/SmartContractContext";
 import "../styles/Home.scss";
 import Post from "../components/Post";
 
-const Home = () => {
+const HomeView = () => {
   const { getAllPosts } = useContext(SmartContractContext);
 
   const [allPosts, setAllPosts] = useState([]);
@@ -36,4 +36,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default HomeView;

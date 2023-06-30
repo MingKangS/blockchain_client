@@ -1,24 +1,25 @@
+import React, { useState, useContext } from "react";
 import moment from "moment/moment";
 import "../styles/components/Post.scss";
 import draftToHtml from "draftjs-to-html";
 import sanitizeHtml from "sanitize-html";
 import { BiUpvote, BiDownvote } from "react-icons/bi";
+import { IoMdSend } from "react-icons/io";
 import { shadeColor } from "../utils/functions";
+import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
+import { Carousel } from "react-responsive-carousel";
 
 const Post = ({ post }) => {
-  const lightenColor = (color) => {
-    return (
-      "#" +
-      color
-        .replace(/^#/, "")
-        .replace(/../g, (color) =>
-          (
-            "0" +
-            Math.min(255, Math.max(0, parseInt(color, 16) + 180)).toString(16)
-          ).substr(-2)
-        )
-    );
+  const [commentInput, setCommentInput] = useState("");
+  const onCommentSent = () => {
+    post.comments.push({
+      author: { username: "me", profilePhoto: "", color: "#3FCVAE" },
+      text: commentInput,
+      timestamp: Date.now(),
+    });
+    setCommentInput("");
   };
+
   return (
     <div className="post-container">
       <div className="post-header">
@@ -29,7 +30,9 @@ const Post = ({ post }) => {
         <p className="author" style={{ color: post.author.color }}>
           {post.author.username}
         </p>
-        <p className="timestamp">{moment.unix(post.timestamp).fromNow()}</p>
+        <p className="timestamp">
+          {moment.unix(post.timestamp / 1000).fromNow()}
+        </p>
       </div>
       <p
         className="postContent"
@@ -37,6 +40,23 @@ const Post = ({ post }) => {
           __html: sanitizeHtml(draftToHtml(JSON.parse(post.postContent))),
         }}
       ></p>
+      <div className="carousel-container">
+        <Carousel>
+          <img
+            className="post-image"
+            src="https://cdn-icons-png.flaticon.com/512/6522/6522516.png"
+          />
+          <img
+            className="post-image"
+            src="https://cdn-icons-png.flaticon.com/512/6522/6522516.png"
+          />
+          <img
+            className="post-image"
+            src="https://cdn-icons-png.flaticon.com/512/6522/6522516.png"
+          />
+        </Carousel>
+      </div>
+
       <div className="interactions">
         <div className="comments-count">{post.comments.length} comments</div>
         <div className="votes">
@@ -48,8 +68,11 @@ const Post = ({ post }) => {
           </div>
         </div>
       </div>
-      {post.comments.map((comment) => (
-        <div style={{ backgroundColor: "#F4F4F4", padding: 6, marginTop: 8 }}>
+      {post.comments.map((comment, idx) => (
+        <div
+          key={idx}
+          style={{ backgroundColor: "#F4F4F4", padding: 6, marginTop: 8 }}
+        >
           <div className="comment-header">
             <img
               src="https://cdn-icons-png.flaticon.com/512/6522/6522516.png"
@@ -62,14 +85,22 @@ const Post = ({ post }) => {
               {comment.author.username}
             </p>
             <p className="comment-timestamp">
-              {moment.unix(comment.timestamp).fromNow()}
+              {moment.unix(comment.timestamp / 1000).fromNow()}
             </p>
           </div>
           <p className="comment-text">{comment.text}</p>
         </div>
       ))}
-      <div>
-        
+      <div className="comment-input-container">
+        <input
+          onChange={(e) => setCommentInput(e.target.value)}
+          placeholder="Type your comment ..."
+          className="comment-input"
+        />
+        <IoMdSend
+          onClick={onCommentSent}
+          style={{ margin: "auto 4px", cursor: "pointer" }}
+        />
       </div>
     </div>
   );

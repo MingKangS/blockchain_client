@@ -40,6 +40,15 @@
   overflow-wrap: break-word;
 }
 
+.carousel-container {
+  max-height: 260px
+}
+
+.post-image {
+  max-height: 260px;
+  object-fit: contain;
+}
+
 .interactions {
   display: flex;
   flex-direction: row;
@@ -105,6 +114,29 @@
 }
 
 .comment-text {
-  margin: 6px 6px;
+  font-family: "Nunito";
+  margin: 8px 6px;
   font-size: 15px;
+  color: #333;
+}
+
+.comment-input-container {
+  margin-top: 12px;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.comment-input {
+  width: calc(100% - 54px);
+  outline: none;
+  padding: 8px 12px;
+  border: 2px solid rgb(160, 160, 160);
+  font-family: "Nunito";
+  color: #333;
+  font-size: 15px;
+}
+
+.comment-input:focus:hover {
+  outline: none;
+  border-radius: 0;
 }

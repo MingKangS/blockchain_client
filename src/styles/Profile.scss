@@ -1,0 +1,44 @@
+.profile-box {
+    background-color: white;
+    width: 400px;
+    height: 300px;
+    display: flex;
+    margin: 30px auto;
+    flex-direction: column;
+}
+
+.photo-container {
+    display: flex;
+    padding: 2px;
+    position: relative;
+    margin: 30px auto 10px auto;
+    border: 2px solid black;
+    border-radius: 50%;
+}
+
+.profile-photo {
+    margin: auto;
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+}
+
+.username {
+    margin: 0px auto;
+}
+
+.edit-photo {
+    display:flex;
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    width: 40px;
+    height:40px;
+    background-color: aqua;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+
+
+

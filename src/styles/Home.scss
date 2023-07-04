@@ -9,7 +9,8 @@
 
 .content {
   width: 50%;
-  max-width: 800pc;
+  min-width: 400px;
+  max-width: 800px;
   display: flex;
   flex-direction: column;
   margin: 40px auto;

@@ -8,6 +8,9 @@ const Layout = () => {
         <Link to="/" className="title">
           Blockster
         </Link>
+        <Link to="/profile" className="profileLink">
+          <img className="profileIcon" src="https://cdn-icons-png.flaticon.com/512/6522/6522516.png"/>
+        </Link>
       </div>
       <Outlet />
     </div>

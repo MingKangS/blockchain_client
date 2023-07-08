@@ -4,14 +4,21 @@ import "../styles/components/Post.scss";
 import draftToHtml from "draftjs-to-html";
 import sanitizeHtml from "sanitize-html";
 import { BiUpvote, BiDownvote } from "react-icons/bi";
+import { TbMessageReport } from "react-icons/tb";
 import { IoMdSend } from "react-icons/io";
 import { shadeColor } from "../utils/functions";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from "react-responsive-carousel";
+import { SmartContractContext } from "../context/SmartContractContext";
 
 const Post = ({ post }) => {
+  const { addComment, downvotePost, upvotePost } =
+    useContext(SmartContractContext);
+
   const [commentInput, setCommentInput] = useState("");
+
   const onCommentSent = () => {
+    addComment(post.id, commentInput);
     post.comments.push({
       author: { username: "me", profilePhoto: "", color: "#3FCVAE" },
       text: commentInput,
@@ -28,6 +35,7 @@ const Post = ({ post }) => {
           {post.author.username}
         </p>
         <p className="timestamp">{moment.unix(post.timestamp).fromNow()}</p>
+        <TbMessageReport className="report-icon" />
       </div>
       <p
         className="postContent"
@@ -48,14 +56,23 @@ const Post = ({ post }) => {
 
       <div className="interactions">
         <div className="comments-count">
-          {post.comments?.length ?? 0} comments
+          {post.comments?.length ?? 0} comment
+          {post.comments?.length != 1 && "s"}
         </div>
         <div className="votes">
           <div className="vote-number">
-            {post.upvotes ?? 0} <BiUpvote className="vote-icon" />
+            {post.upvotes.length ?? 0}{" "}
+            <BiUpvote
+              onClick={() => upvotePost(post.id)}
+              className="vote-icon"
+            />
           </div>
           <div className="vote-number">
-            {post.downvotes ?? 0} <BiDownvote className="vote-icon" />
+            {post.downvotes.length ?? 0}{" "}
+            <BiDownvote
+              onClick={() => downvotePost(post.id)}
+              className="vote-icon"
+            />
           </div>
         </div>
       </div>
@@ -66,7 +83,7 @@ const Post = ({ post }) => {
             style={{ backgroundColor: "#F4F4F4", padding: 6, marginTop: 8 }}>
             <div className="comment-header">
               <img
-                src="https://cdn-icons-png.flaticon.com/512/6522/6522516.png"
+                src={comment.author.profilePicture}
                 className="comment-photo"
               />
               <p

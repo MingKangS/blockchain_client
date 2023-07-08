@@ -57,7 +57,6 @@ export const SmartContractProvider = ({ children }) => {
       });
 
       setCurrentAccount(accounts[0]);
-      window.location.reload();
     } catch (error) {
       console.log(error);
 
@@ -72,10 +71,22 @@ export const SmartContractProvider = ({ children }) => {
       const allPosts = await postsContract.getAllPosts();
 
       const structuredPosts = allPosts.map((post) => ({
+        id: post.id,
         author: post.author,
         postContent: post.postContent,
         timestamp: Number(post.timestamp),
-        images: post.images,
+        images: Array.from(post.images),
+        comments: Array.from(post.comments).map((comment) => ({
+          author: {
+            username: comment[0][0],
+            color: comment[0][1],
+            profilePicture: comment[0][2],
+          },
+          text: comment[1],
+          timestamp: Number(comment[2]),
+        })),
+        upvotes: Array.from(post.upvotes),
+        downvotes: Array.from(post.downvotes),
       }));
 
       console.log(structuredPosts, allPosts);
@@ -117,8 +128,6 @@ export const SmartContractProvider = ({ children }) => {
       const transactionHash = await postsContract.addPost(postContent, images);
 
       await transactionHash.wait();
-
-      window.location.reload();
     } catch (error) {
       console.log(error);
     }
@@ -143,9 +152,9 @@ export const SmartContractProvider = ({ children }) => {
       if (!profile || !profile.username) {
         const username = UsernameGenerator.generateUsername();
         const color = uniqolor.random({
-          saturation: 80,
-          lightness: [70, 80],
-        });
+          saturation: [30, 80],
+          lightness: [10, 50],
+        }).color;
 
         editProfile(
           username,
@@ -173,8 +182,48 @@ export const SmartContractProvider = ({ children }) => {
       await transactionHash.wait();
 
       console.log(transactionHash);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-      window.location.reload();
+  const addComment = async (postId, comment) => {
+    try {
+      const postsContract = await createEthereumContract();
+
+      const transactionHash = await postsContract.addComment(postId, comment);
+
+      await transactionHash.wait();
+
+      console.log(transactionHash);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const upvotePost = async (postId) => {
+    try {
+      const postsContract = await createEthereumContract();
+
+      const transactionHash = await postsContract.upvotePost(postId);
+
+      await transactionHash.wait();
+
+      console.log(transactionHash);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const downvotePost = async (postId) => {
+    try {
+      const postsContract = await createEthereumContract();
+
+      const transactionHash = await postsContract.downvotePost(postId);
+
+      await transactionHash.wait();
+
+      console.log(transactionHash);
     } catch (error) {
       console.log(error);
     }
@@ -191,6 +240,9 @@ export const SmartContractProvider = ({ children }) => {
         currentProfile,
         editProfile,
         getProfile,
+        addComment,
+        downvotePost,
+        upvotePost,
       }}>
       {children}
     </SmartContractContext.Provider>

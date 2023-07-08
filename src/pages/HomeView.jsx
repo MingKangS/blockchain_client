@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { SmartContractContext } from "../context/SmartContractContext";
 import "../styles/Home.scss";
+import LoadingSpinner from "../components/loadingSpinner";
 import Post from "../components/Post";
 
 const HomeView = () => {
@@ -12,6 +13,7 @@ const HomeView = () => {
   useEffect(() => {
     getAllPosts()
       .then((res) => {
+        console.log(res);
         setAllPosts(res);
       })
       .catch((err) => {
@@ -26,11 +28,15 @@ const HomeView = () => {
         <Link to="/new-post" className="new-post-button">
           Create a post ...
         </Link>
-        <div>
-          {allPosts.map((post, idx) => (
-            <Post post={post} key={idx} />
-          ))}
-        </div>
+        {allPosts.length != 0 ? (
+          <div>
+            {allPosts.map((post, idx) => (
+              <Post post={post} key={idx} />
+            ))}
+          </div>
+        ) : (
+          <LoadingSpinner size={80} />
+        )}
       </div>
     </div>
   );

@@ -146,11 +146,7 @@ export const SmartContractProvider = ({ children }) => {
           saturation: 80,
           lightness: [70, 80],
         });
-        console.log(
-          username,
-          "https://cdn-icons-png.flaticon.com/512/6522/6522516.png",
-          color
-        );
+
         editProfile(
           username,
           "https://cdn-icons-png.flaticon.com/512/6522/6522516.png",
@@ -193,6 +189,8 @@ export const SmartContractProvider = ({ children }) => {
         addNewPost,
         checkIfWalletIsConnected,
         currentProfile,
+        editProfile,
+        getProfile,
       }}>
       {children}
     </SmartContractContext.Provider>

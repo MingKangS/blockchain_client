@@ -1,7 +1,17 @@
 import { Outlet, Link } from "react-router-dom";
 import "../styles/Layout.scss";
+import { SmartContractContext } from "../context/SmartContractContext";
+import { useContext, useEffect, useState } from "react";
 
 const Layout = () => {
+  const { currentProfile: profile } = useContext(SmartContractContext);
+
+  const [profilePicture, setprofilePicture] = useState(profile.profilePicture);
+
+  useEffect(() => {
+    setprofilePicture(profile.profilePicture);
+  }, [profile]);
+
   return (
     <div>
       <div className="header">
@@ -9,7 +19,7 @@ const Layout = () => {
           Blockster
         </Link>
         <Link to="/profile" className="profileLink">
-          <img className="profileIcon" src="https://cdn-icons-png.flaticon.com/512/6522/6522516.png"/>
+          <img className="profileIcon" src={profilePicture} />
         </Link>
       </div>
       <Outlet />

@@ -4,9 +4,14 @@ import "../styles/Profile.scss";
 import "../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { FaPen, FaImage } from "react-icons/fa";
 import LoadingSpinner from "../components/loadingSpinner";
+import { uploadFileToIPFS } from "../utils/functions";
 
 const ProfileView = () => {
-  const { currentProfile: profile } = useContext(SmartContractContext);
+  const {
+    currentProfile: profile,
+    editProfile,
+    getProfile,
+  } = useContext(SmartContractContext);
 
   useEffect(() => {
     setprofilePicture(profile.profilePicture);
@@ -16,14 +21,20 @@ const ProfileView = () => {
 
   const imageInput = useRef(null);
 
-  const editUsername = () => {
+  const editUsername = async () => {
     const newUsername = prompt("Please enter a new username:");
-    console.log(newUsername);
+    await editProfile(newUsername, profilePicture, profile.color);
+    const newProfile = await getProfile();
+    console.log(newProfile);
   };
 
-  const onNewImageInput = (e) => {
-    console.log(e.target.files[0]);
-    setprofilePicture(URL.createObjectURL(e.target.files[0]));
+  const onNewImageInput = async (e) => {
+    const imageHash = await uploadFileToIPFS(e.target.files[0]);
+    const newProfilePicture = `https://ipfs.io/ipfs/${imageHash}`;
+    await editProfile(profile.username, newProfilePicture, profile.color);
+    const newProfile = await getProfile();
+    console.log(newProfile);
+    setprofilePicture(newProfilePicture);
   };
 
   return (

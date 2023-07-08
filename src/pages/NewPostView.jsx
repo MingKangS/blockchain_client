@@ -5,7 +5,7 @@ import { Editor } from "react-draft-wysiwyg";
 import "../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from "react-responsive-carousel";
-import { uploadFileToIPFS, getIPFSFile } from "../utils/functions";
+import { uploadFileToIPFS } from "../utils/functions";
 
 const NewPostView = () => {
   const imageInput = useRef(null);
@@ -28,12 +28,17 @@ const NewPostView = () => {
           onChange={(draft) => setPostContent(JSON.stringify(draft))}
           editorClassName="post-content-input"
         />
-        <Carousel>
-          {images.map((image) => (
-            <img className="post-image" src={image} />
-          ))}
-        </Carousel>
-        <div>
+        {images.length != 0 && (
+          <div className="carousel-container">
+            <Carousel>
+              {images.map((image) => (
+                <img className="post-image" src={image} />
+              ))}
+            </Carousel>
+          </div>
+        )}
+
+        <div style={{ display: "flex" }}>
           <button className="post-button" onClick={postButtonClicked}>
             Post
           </button>

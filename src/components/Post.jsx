@@ -23,16 +23,11 @@ const Post = ({ post }) => {
   return (
     <div className="post-container">
       <div className="post-header">
-        <img
-          src="https://cdn-icons-png.flaticon.com/512/6522/6522516.png"
-          className="author-photo"
-        />
+        <img src={post.author.profilePicture} className="author-photo" />
         <p className="author" style={{ color: post.author.color }}>
           {post.author.username}
         </p>
-        <p className="timestamp">
-          {moment.unix(post.timestamp / 1000).fromNow()}
-        </p>
+        <p className="timestamp">{moment.unix(post.timestamp).fromNow()}</p>
       </div>
       <p
         className="postContent"
@@ -44,9 +39,11 @@ const Post = ({ post }) => {
           ),
         }}></p>
       <div className="carousel-container">
-        {post.images?.map((image) => (
-          <img className="post-image" src={image} />
-        ))}
+        <Carousel>
+          {post.images?.map((image, idx) => (
+            <img key={idx} className="post-image" src={image} />
+          ))}
+        </Carousel>
       </div>
 
       <div className="interactions">

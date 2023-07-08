@@ -37,60 +37,53 @@ const Post = ({ post }) => {
       <p
         className="postContent"
         dangerouslySetInnerHTML={{
-          __html: sanitizeHtml(draftToHtml(JSON.parse(post.postContent))),
-        }}
-      ></p>
+          __html: sanitizeHtml(
+            draftToHtml(
+              JSON.parse(post.postContent.length ? post.postContent : "{}")
+            )
+          ),
+        }}></p>
       <div className="carousel-container">
-        <Carousel>
-          <img
-            className="post-image"
-            src="https://cdn-icons-png.flaticon.com/512/6522/6522516.png"
-          />
-          <img
-            className="post-image"
-            src="https://cdn-icons-png.flaticon.com/512/6522/6522516.png"
-          />
-          <img
-            className="post-image"
-            src="https://cdn-icons-png.flaticon.com/512/6522/6522516.png"
-          />
-        </Carousel>
+        {post.images?.map((image) => (
+          <img className="post-image" src={image} />
+        ))}
       </div>
 
       <div className="interactions">
-        <div className="comments-count">{post.comments.length} comments</div>
+        <div className="comments-count">
+          {post.comments?.length ?? 0} comments
+        </div>
         <div className="votes">
           <div className="vote-number">
-            {post.upvotes} <BiUpvote className="vote-icon" />
+            {post.upvotes ?? 0} <BiUpvote className="vote-icon" />
           </div>
           <div className="vote-number">
-            {post.downvotes} <BiDownvote className="vote-icon" />
+            {post.downvotes ?? 0} <BiDownvote className="vote-icon" />
           </div>
         </div>
       </div>
-      {post.comments.map((comment, idx) => (
-        <div
-          key={idx}
-          style={{ backgroundColor: "#F4F4F4", padding: 6, marginTop: 8 }}
-        >
-          <div className="comment-header">
-            <img
-              src="https://cdn-icons-png.flaticon.com/512/6522/6522516.png"
-              className="comment-photo"
-            />
-            <p
-              className="comment-username"
-              style={{ color: comment.author.color }}
-            >
-              {comment.author.username}
-            </p>
-            <p className="comment-timestamp">
-              {moment.unix(comment.timestamp / 1000).fromNow()}
-            </p>
+      {post.comments &&
+        post.comments.map((comment, idx) => (
+          <div
+            key={idx}
+            style={{ backgroundColor: "#F4F4F4", padding: 6, marginTop: 8 }}>
+            <div className="comment-header">
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/6522/6522516.png"
+                className="comment-photo"
+              />
+              <p
+                className="comment-username"
+                style={{ color: comment.author.color }}>
+                {comment.author.username}
+              </p>
+              <p className="comment-timestamp">
+                {moment.unix(comment.timestamp / 1000).fromNow()}
+              </p>
+            </div>
+            <p className="comment-text">{comment.text}</p>
           </div>
-          <p className="comment-text">{comment.text}</p>
-        </div>
-      ))}
+        ))}
       <div className="comment-input-container">
         <input
           onChange={(e) => setCommentInput(e.target.value)}

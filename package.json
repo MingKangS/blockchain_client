@@ -21,6 +21,7 @@
     "react-dom": "^18.2.0",
     "react-draft-wysiwyg": "^1.15.0",
     "react-icons": "^4.9.0",
+    "react-notifications": "^1.7.4",
     "react-responsive-carousel": "^3.2.23",
     "react-scripts": "^5.0.1",
     "sanitize-html": "^2.10.0",

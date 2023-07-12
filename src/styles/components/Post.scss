@@ -35,7 +35,6 @@
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  background-color: aqua;
   margin: 4px 0px auto 0px;
 }
 
@@ -43,7 +42,15 @@
   color: rgb(148, 0, 0);
   font-size: 22px;
   display: inline-block;
-  margin: auto 24px auto auto;
+  margin: auto 24px auto 0px;
+  cursor: pointer;
+}
+
+.ethereum-icon {
+  color: rgb(6, 118, 0);
+  font-size: 22px;
+  display: inline-block;
+  margin: auto 6px auto auto;
   cursor: pointer;
 }
 
@@ -104,7 +111,6 @@
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background-color: aqua;
 }
 
 .comment-username {

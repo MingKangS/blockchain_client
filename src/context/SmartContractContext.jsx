@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { contractABI, contractAddress } from "../utils/constants";
 import uniqolor from "uniqolor";
+import { NotificationManager } from "react-notifications";
+
 var UsernameGenerator = require("username-generator");
 const { ethers } = require("ethers");
 
@@ -72,6 +74,7 @@ export const SmartContractProvider = ({ children }) => {
 
       const structuredPosts = allPosts.map((post) => ({
         id: post.id,
+        authorId: post.authorId,
         author: post.author,
         postContent: post.postContent,
         timestamp: Number(post.timestamp),
@@ -126,7 +129,7 @@ export const SmartContractProvider = ({ children }) => {
       const postsContract = await createEthereumContract();
 
       const transactionHash = await postsContract.addPost(postContent, images);
-
+      NotificationManager.info("Your post is being added. Please wait.");
       await transactionHash.wait();
     } catch (error) {
       console.log(error);
@@ -165,7 +168,7 @@ export const SmartContractProvider = ({ children }) => {
       return profile;
     } catch (error) {
       console.log(error);
-      return {};
+      throw error;
     }
   };
 
@@ -178,7 +181,7 @@ export const SmartContractProvider = ({ children }) => {
         profilePicture,
         color,
       });
-
+      NotificationManager.info("Your account is being updated. Please wait.");
       await transactionHash.wait();
 
       console.log(transactionHash);
@@ -192,9 +195,9 @@ export const SmartContractProvider = ({ children }) => {
       const postsContract = await createEthereumContract();
 
       const transactionHash = await postsContract.addComment(postId, comment);
-
+      NotificationManager.info("Your comment is being added. Please wait.");
       await transactionHash.wait();
-
+      NotificationManager.success("Your comment is has successfully added.");
       console.log(transactionHash);
     } catch (error) {
       console.log(error);
@@ -207,7 +210,9 @@ export const SmartContractProvider = ({ children }) => {
 
       const transactionHash = await postsContract.upvotePost(postId);
 
+      NotificationManager.info("Your upvote is being added. Please wait.");
       await transactionHash.wait();
+      NotificationManager.success("Your upvote is has successfully added.");
 
       console.log(transactionHash);
     } catch (error) {
@@ -220,9 +225,28 @@ export const SmartContractProvider = ({ children }) => {
       const postsContract = await createEthereumContract();
 
       const transactionHash = await postsContract.downvotePost(postId);
+      NotificationManager.info("Your downvote is being added. Please wait.");
 
       await transactionHash.wait();
+      NotificationManager.success("Your downvote is has successfully added.");
 
+      console.log(transactionHash);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const reportPost = async (postId) => {
+    try {
+      const postsContract = await createEthereumContract();
+
+      const transactionHash = await postsContract.reportPost(postId);
+      NotificationManager.warning("This post is being reported");
+      await transactionHash.wait();
+      NotificationManager.success(
+        "Thank you for reporting. Our moderators will investigate if this post violates our user guidelines.",
+        "This post has been reported."
+      );
       console.log(transactionHash);
     } catch (error) {
       console.log(error);
@@ -243,6 +267,7 @@ export const SmartContractProvider = ({ children }) => {
         addComment,
         downvotePost,
         upvotePost,
+        reportPost,
       }}>
       {children}
     </SmartContractContext.Provider>

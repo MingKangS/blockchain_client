@@ -6,14 +6,27 @@ import "../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from "react-responsive-carousel";
 import { uploadFileToIPFS } from "../utils/functions";
+import { useNavigate } from "react-router-dom";
+import { NotificationManager } from "react-notifications";
 
 const NewPostView = () => {
   const imageInput = useRef(null);
   const [postContent, setPostContent] = useState("");
   const [images, setImages] = useState([]);
   const { addNewPost } = useContext(SmartContractContext);
-  const postButtonClicked = () => {
-    addNewPost(postContent, images);
+  const navigate = useNavigate();
+
+  const postButtonClicked = async () => {
+    await addNewPost(postContent, images)
+      .then((res) => {
+        navigate("/");
+      })
+      .catch((err) => {
+        NotificationManager.error(
+          "An error occurred while adding the post.",
+          err
+        );
+      });
   };
 
   const onNewImageInput = async (e) => {

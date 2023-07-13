@@ -58,10 +58,14 @@ const ProfileView = () => {
             </div>
           </div>
 
-          <h1 className="username">
+          <h1 className="username" style={{ color: profile.color }}>
             @{profile.username}&nbsp;
             <FaPen
-              style={{ fontSize: "18px", cursor: "pointer" }}
+              style={{
+                fontSize: "18px",
+                cursor: "pointer",
+                color: "black",
+              }}
               onClick={editUsername}
             />
           </h1>

@@ -44,8 +44,8 @@ const NewPostView = () => {
         {images.length != 0 && (
           <div className="carousel-container">
             <Carousel>
-              {images.map((image) => (
-                <img className="post-image" src={image} />
+              {images.map((image, idx) => (
+                <img className="post-image" src={image} key={idx} />
               ))}
             </Carousel>
           </div>
@@ -57,6 +57,7 @@ const NewPostView = () => {
           </button>
           <button
             className="post-button"
+            style={{ backgroundColor: "#6a5d77", color: "white" }}
             onClick={() => imageInput.current.click()}>
             Add image
           </button>

@@ -19,7 +19,7 @@ import { SmartContractContext } from "../context/SmartContractContext";
 import { NotificationManager } from "react-notifications";
 const ethers = require("ethers");
 
-const Post = ({ post }) => {
+const Post = ({ post: _post }) => {
   const {
     currentProfile,
     currentAccount,
@@ -30,6 +30,7 @@ const Post = ({ post }) => {
   } = useContext(SmartContractContext);
 
   const [commentInput, setCommentInput] = useState("");
+  const [post, setPost] = useState(_post);
 
   const onCommentSent = async () => {
     await addComment(post.id, commentInput).then((res) => {
@@ -41,17 +42,6 @@ const Post = ({ post }) => {
     });
 
     setCommentInput("");
-  };
-
-  const downvote = async () => {
-    await downvotePost(post.id).then((res) => {
-      post.comments.push({
-        author: currentProfile,
-        text: "commentInput",
-        timestamp: Date.now(),
-      });
-      post.downvotes.push(currentAccount);
-    });
   };
 
   const donateEth = async () => {
@@ -134,7 +124,10 @@ const Post = ({ post }) => {
               <TbArrowBigUp
                 onClick={() => {
                   upvotePost(post.id);
-                  post.upvotes.push(currentAccount);
+                  setPost({
+                    ...post,
+                    upvotes: [...post.upvotes, currentAccount],
+                  });
                 }}
                 className="vote-icon"
               />
@@ -148,7 +141,16 @@ const Post = ({ post }) => {
               .includes(currentAccount) ? (
               <TbArrowBigDownFilled className="vote-icon" />
             ) : (
-              <TbArrowBigDown onClick={onCommentSent} className="vote-icon" />
+              <TbArrowBigDown
+                onClick={() => {
+                  downvotePost(post.id);
+                  setPost({
+                    ...post,
+                    downvotes: [...post.downvotes, currentAccount],
+                  });
+                }}
+                className="vote-icon"
+              />
             )}
           </div>
         </div>

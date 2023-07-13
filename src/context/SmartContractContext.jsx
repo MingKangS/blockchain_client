@@ -131,6 +131,7 @@ export const SmartContractProvider = ({ children }) => {
       const transactionHash = await postsContract.addPost(postContent, images);
       NotificationManager.info("Your post is being added. Please wait.");
       await transactionHash.wait();
+      NotificationManager.info("Your post has been successfully created.");
     } catch (error) {
       console.log(error);
     }
@@ -158,7 +159,10 @@ export const SmartContractProvider = ({ children }) => {
           saturation: [30, 80],
           lightness: [10, 50],
         }).color;
-
+        NotificationManager.info(
+          "Hey there! It seems like this is your first time here. A new profile is being created for you.",
+          "Profile creation for new account"
+        );
         editProfile(
           username,
           "https://cdn-icons-png.flaticon.com/512/6522/6522516.png",
@@ -183,7 +187,8 @@ export const SmartContractProvider = ({ children }) => {
       });
       NotificationManager.info("Your account is being updated. Please wait.");
       await transactionHash.wait();
-
+      NotificationManager.success("Your account has been successfully updated");
+      getProfile();
       console.log(transactionHash);
     } catch (error) {
       console.log(error);

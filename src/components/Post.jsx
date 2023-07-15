@@ -88,7 +88,6 @@ const Post = ({ post: _post }) => {
         )}
       </div>
       <p
-        onClick={onCommentSent}
         className="postContent"
         dangerouslySetInnerHTML={{
           __html: sanitizeHtml(
